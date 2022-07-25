@@ -1,4 +1,6 @@
 
+const pool=require('../connection/dbcon.js');
+
 const register=(req,res)=>{
      res.status(200).send("register");
 }
