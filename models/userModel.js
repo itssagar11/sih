@@ -14,8 +14,6 @@ class userAuthModel {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
 
-        console.log(this.password);
-
         let query = `INSERT INTO users(
     name,
     password,
@@ -24,7 +22,6 @@ class userAuthModel {
   )VALUES("${this.name}","${this.password}","${this.email}","${this.role}")`;
         const [user, _] = await pool.execute(query);
         return user;
-
     }
 }
 
