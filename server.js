@@ -2,6 +2,8 @@ const { response } = require('express');
 const express = require('express');
 require("dotenv").config();
 
+const authRouter = require("./routes/authRoutes");
+
 const app = express();
 
 
@@ -16,6 +18,7 @@ app.use((err, req, res, next) => {
 
 //ROUTES
 app.get('/', express.static('public'));
+app.use('/api/v1', authRouter);
 
 
 
