@@ -36,6 +36,8 @@ const sendVerificationEmail = async (req, res) => {
         error.origin = "sendVerificationMail";
         throw error;
     }
+    //CHECK PASSWORD LEFT
+
     const { name, verificationToken, verified } = User;
     if (verified) {
         var error = new customError.badRequestError("your mail is verified");
@@ -43,7 +45,7 @@ const sendVerificationEmail = async (req, res) => {
         throw error;
     }
     const origin = process.env.ORIGIN;
-    
+
     await Mail.verificationMail({
         name: name,
         email: email,
@@ -57,11 +59,10 @@ const sendVerificationEmail = async (req, res) => {
     });
 }
 
-const verifyMail = (req, res) => {
-    console.log(req.body);
-    console.log(req.params);
-     res.redirect('www.google.com')
-     
+const verifyMail = async (req, res) => {
+    const { token, email } = req.query;
+    res.status(200).redirect("/");
+
 }
 
 const login = (req, res) => {
