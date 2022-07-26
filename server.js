@@ -3,24 +3,22 @@ const express = require('express');
 require("dotenv").config();
 require("express-async-errors");
 const authRouter = require("./routes/authRoutes");
+const errorHandler = require("./middleware/errorHandler");
+const globalErrorHandler = require("./middleware/globalErrorHandler")
 
 const app = express();
 
 
 //MIDDLEWARE
 app.use(express.json());
-app.use((err, req, res, next) => {
-    res.status(500).json({
-        message: "something went wrong"
-    });
-});
+
 
 
 //ROUTES
 app.get('/', express.static('public'));
-app.use('/api/v1', authRouter);
+app.use('/api/v1', errorHandler(authRouter));
 
-
+app.use(globalErrorHandler);
 
 
 const startServer = () => {
