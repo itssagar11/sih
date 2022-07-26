@@ -7,9 +7,9 @@ require('dotenv').config();
 
 const register = async (req, res, next) => {
     const { name, password, email, role } = req.body;
-    const [[FindUser, __], _] = await userAuthModel.findUser(email);
+    const [[User, __], _] = await userAuthModel.findUser(email);
 
-    if (FindUser) {
+    if (User) {
         var error = new customError.badRequestError("invalid email try again");
         error.origin = "email";
         throw error;
@@ -43,11 +43,7 @@ const sendVerificationEmail = async (req, res) => {
         throw error;
     }
 
-    if (User.verified) {
-        var error = new customError.badRequestError("already verified");
-        error.origin = "verifyMail";
-        throw error;
-    }
+
     const { name, verificationToken, verified } = User;
     if (verified) {
         var error = new customError.badRequestError("your mail is verified");
@@ -94,8 +90,21 @@ const verifyMail = async (req, res) => {
 
 }
 
-const login = (req, res) => {
-    res.status(200).send("login");
+const login = async (req, res) => {
+    const { email, password } = req.body;
+    const [[User, __], _] = await userAuthModel.findUser(email);
+    if (!User) {
+        var error = new customError.badRequestError("please  try again");
+        error.origin = "verifyMail";
+        throw error;
+    }
+    const passwordComparison = await userAuthModel.comparePassword(password, User.password);
+    if (!passwordComparison) {
+        var error = new customError.badRequestError("wrong password");
+        error.origin = "password";
+        throw error;
+    }
+    res.status(200).redirect("logged in ");
 }
 
 const logout = (req, res) => {
