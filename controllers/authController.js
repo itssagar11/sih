@@ -36,8 +36,12 @@ const sendVerificationEmail = async (req, res) => {
         error.origin = "sendVerificationMail";
         throw error;
     }
-    //CHECK PASSWORD LEFT
-
+    const passwordComparison = await userAuthModel.comparePassword(password, User.password);
+    if (!passwordComparison) {
+        var error = new customError.badRequestError("wrong password");
+        error.origin = "password";
+        throw error;
+    }
     const { name, verificationToken, verified } = User;
     if (verified) {
         var error = new customError.badRequestError("your mail is verified");

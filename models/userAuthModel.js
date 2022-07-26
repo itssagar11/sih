@@ -1,6 +1,6 @@
 const pool = require("../connection/dbcon");
 const customError = require("../utils/customErrors");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const emailValidator = require("email-validator");
 require('dotenv').config();
 const Validator = require('password-validator');
@@ -56,7 +56,6 @@ class userAuthModel {
         }
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
-
         let query = `INSERT INTO users(
     name,
     password,
@@ -65,6 +64,7 @@ class userAuthModel {
     verificationToken
   )VALUES("${this.name}","${this.password}","${this.email}","${this.role}","${this.verificationToken}")`;
         return pool.execute(query);
+
     }
 
 
@@ -72,8 +72,11 @@ class userAuthModel {
         let query = `SELECT * FROM users WHERE email='${email}'`;
         return pool.execute(query);
     }
+    static async comparePassword(userPassword, databasePassword) {
+       return bcrypt.compare(userPassword, databasePassword);
+        
+    }
 
-    
 }
 
 module.exports = userAuthModel
