@@ -42,6 +42,12 @@ const sendVerificationEmail = async (req, res) => {
         error.origin = "password";
         throw error;
     }
+
+    if (User.verified) {
+        var error = new customError.badRequestError("already verified");
+        error.origin = "verifyMail";
+        throw error;
+    }
     const { name, verificationToken, verified } = User;
     if (verified) {
         var error = new customError.badRequestError("your mail is verified");
@@ -65,6 +71,25 @@ const sendVerificationEmail = async (req, res) => {
 
 const verifyMail = async (req, res) => {
     const { token, email } = req.query;
+    const [[User, __], _] = await userAuthModel.findUser(email);
+
+    if (!User) {
+        var error = new customError.badRequestError("please  try again");
+        error.origin = "verifyMail";
+        throw error;
+    }
+    if (User.verified) {
+        var error = new customError.badRequestError("already verified");
+        error.origin = "verifyMail";
+        throw error;
+    }
+
+    if (token != User.verificationToken) {
+        var error = new customError.badRequestError("please try again");
+        error.origin = "verifyMail";
+        throw error;
+    }
+    await userAuthModel.updateValidation(email);
     res.status(200).redirect("/");
 
 }

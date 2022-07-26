@@ -73,8 +73,13 @@ class userAuthModel {
         return pool.execute(query);
     }
     static async comparePassword(userPassword, databasePassword) {
-       return bcrypt.compare(userPassword, databasePassword);
-        
+        return bcrypt.compare(userPassword, databasePassword);
+
+    }
+
+    static async updateValidation(email) {
+        let query = `UPDATE users SET verified=1 WHERE email="${email}"`;
+        return pool.execute(query);
     }
 
 }
