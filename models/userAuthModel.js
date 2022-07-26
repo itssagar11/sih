@@ -8,11 +8,12 @@ const Validator = require('password-validator');
 
 class userAuthModel {
     roles = ["admin", "user", "employee"];
-    constructor(name, password, email, role) {
+    constructor(name, password, email, role, verificationToken) {
         this.name = name;
         this.email = email;
         this.role = role;
         this.password = password;
+        this.verificationToken = verificationToken;
     }
 
 
@@ -60,9 +61,10 @@ class userAuthModel {
     name,
     password,
     email,
-    role
-  )VALUES("${this.name}","${this.password}","${this.email}","${this.role}")`;
-        return  pool.execute(query);
+    role,
+    verificationToken
+  )VALUES("${this.name}","${this.password}","${this.email}","${this.role}","${this.verificationToken}")`;
+        return pool.execute(query);
     }
 
 
@@ -70,6 +72,8 @@ class userAuthModel {
         let query = `SELECT * FROM users WHERE email='${email}'`;
         return pool.execute(query);
     }
+
+    
 }
 
 module.exports = userAuthModel

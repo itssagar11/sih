@@ -16,7 +16,7 @@ app.use(express.json());
 
 //ROUTES
 app.get('/', express.static('public'));
-app.use('/api/v1', errorHandler(authRouter));
+app.use('/api/v1/auth', errorHandler(authRouter));
 
 app.use(globalErrorHandler);
 

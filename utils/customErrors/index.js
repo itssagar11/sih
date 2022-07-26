@@ -1,6 +1,7 @@
-const badRequestError=require("./badRequest");
+const badRequestError = require("./badRequest");
 
 
-module.exports={
-    badRequestError
+module.exports = {
+    badRequestError,
+   
 }
