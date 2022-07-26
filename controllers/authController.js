@@ -1,11 +1,11 @@
 
-const userAuthModel = require("../models/userModel");
+const userAuthModel = require("../models/userAuthModel");
 const customError = require("../utils/customErrors");
 
 
 const register = async (req, res, next) => {
     const { name, password, email, role } = req.body;
-    const [FindUser, _] = await userAuthModel.findUser(email);
+    const [[FindUser], _] = await userAuthModel.findUser(email);
     if (FindUser) {
         var error = new customError.badRequestError("invalid email try again");
         error.origin = "email";
