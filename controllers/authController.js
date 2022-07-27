@@ -82,13 +82,19 @@ const login = async (req, res) => {
     const [[User, __], _] = await userAuthModel.findUser(email);
     if (!User) {
         var error = new customError.badRequestError("please  try again");
-        error.origin = "verifyMail";
+        error.origin = "not registered";
         throw error;
     }
+
     const passwordComparison = await userAuthModel.comparePassword(password, User.password);
     if (!passwordComparison) {
         var error = new customError.badRequestError("wrong password");
         error.origin = "password";
+        throw error;
+    }
+    if (!User.verified) {
+        var error = new customError.badRequestError("please  try again");
+        error.origin = "please verify mail";
         throw error;
     }
     res.status(200).redirect("logged in ");
