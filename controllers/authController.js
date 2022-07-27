@@ -2,6 +2,7 @@
 const userAuthModel = require("../models/userAuthModel");
 const customError = require("../utils/customErrors");
 const Mail = require("../utils/mailer");
+const createCookie = require("../utils/createCookie");
 const crypto = require('crypto');
 require('dotenv').config();
 
@@ -70,7 +71,7 @@ const verifyMail = async (req, res) => {
     const [[User, __], _] = await userAuthModel.findUser(email);
 
     if (User && !User.verified && (token != User.verificationToken)) {
-        await userAuthModel.updateValidation(email);
+        await userAuthModel.update("verified", 1, email);
     }
 
     res.status(200).redirect("/");
@@ -97,11 +98,24 @@ const login = async (req, res) => {
         error.origin = "please verify mail";
         throw error;
     }
-    res.status(200).redirect("logged in ");
+
+    const refreshToken = crypto.randomBytes(40).toString('hex');
+    user = { name: User.name, email: User.email, role: User.role, verified: User.verified };
+    createCookie(res, user, refreshToken);
+    res.status(200).send("logged in ");
 }
 
 const logout = (req, res) => {
-    res.status(200).send("logout");
+    if (req.signedCookies.accessCookie) res.cookie('accessCookie', 'logout', {
+        httpOnly: true,
+        expires: new Date(Date.now()),
+    });
+    if (req.signedCookies.refreshCookie) res.cookie('refreshCookie', 'logout', {
+        httpOnly: true,
+        expires: new Date(Date.now()),
+    });
+
+    res.status(200).redirect("/");
 }
 
 module.exports = {

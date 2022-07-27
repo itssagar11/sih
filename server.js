@@ -1,4 +1,5 @@
 const { response } = require('express');
+const cookieParser = require("cookie-parser");
 const express = require('express');
 require("dotenv").config();
 require("express-async-errors");
@@ -11,7 +12,7 @@ const app = express();
 
 //MIDDLEWARE
 app.use(express.json());
-
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 
 //ROUTES

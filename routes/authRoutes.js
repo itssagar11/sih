@@ -1,4 +1,5 @@
 const express = require('express');
+const { authenticate } = require("../middleware/authentication");
 const router = express.Router();
 
 const {
@@ -11,7 +12,7 @@ const {
 
 router.route('/register').post(register);
 router.route('/login').post(login);
-router.route('/logout').get(logout);
+router.route('/logout').get(authenticate,logout);
 router.route('/sendVerification').post(sendVerificationEmail);
 router.route('/verifyMail').get(verifyMail);
 

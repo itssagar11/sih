@@ -77,8 +77,8 @@ class userAuthModel {
 
     }
 
-    static async updateValidation(email) {
-        let query = `UPDATE users SET verified=1 WHERE email="${email}"`;
+    static async update(field,value,email) {
+        let query = `UPDATE users SET ${field}=${value} WHERE email="${email}"`;
         return pool.execute(query);
     }
 
