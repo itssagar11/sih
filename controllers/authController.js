@@ -69,23 +69,10 @@ const verifyMail = async (req, res) => {
     const { token, email } = req.query;
     const [[User, __], _] = await userAuthModel.findUser(email);
 
-    if (!User) {
-        var error = new customError.badRequestError("please  try again");
-        error.origin = "verifyMail";
-        throw error;
-    }
-    if (User.verified) {
-        var error = new customError.badRequestError("already verified");
-        error.origin = "verifyMail";
-        throw error;
+    if (User && !User.verified && (token != User.verificationToken)) {
+        await userAuthModel.updateValidation(email);
     }
 
-    if (token != User.verificationToken) {
-        var error = new customError.badRequestError("please try again");
-        error.origin = "verifyMail";
-        throw error;
-    }
-    await userAuthModel.updateValidation(email);
     res.status(200).redirect("/");
 
 }
