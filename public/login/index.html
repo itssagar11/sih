@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <section class="section">
+      <form name="login" onsubmit=" sendLoginRequest()">
+        <div class="title">Email</div>
+        <input
+          type="email"
+          autocomplete="current-email"
+          class="input"
+          placeholder="example@example.com"
+          name="email"
+        />
+        <div class="title">password</div>
+        <input
+          type="password"
+          autocomplete="current-password"
+          class="input"
+          placeholder="1234"
+          name="password"
+        />
+        <input type="submit" value="Login" />
+      </form>
+      <div id="message"></div>
+    </section>
+  </body>
+  <script>
+    const xhr = new XMLHttpRequest();
+
+    const sendLoginRequest = (e) => {
+      event.preventDefault();
+      let req = {
+        email: document.login.email.value,
+        password: document.login.password.value,
+      };
+
+      if (!req.email || !req.password) {
+        const message = document.getElementById("message");
+        message.innerHTML = "fields cannot be empty";
+        setTimeout(() => {
+          message.innerHTML = "";
+        }, 2000);
+        return;
+      }
+
+      req = JSON.stringify(req);
+      xhr.open("POST", "http://localhost:4000/api/v1/auth/login");
+      xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+      xhr.send(req);
+      xhr.onload = () => {
+        let res = JSON.parse(xhr.response);
+        console.log(res);
+
+        if (res.status) {
+          document.location.assign("/user");
+          return;
+        }
+      };
+    };
+  </script>
+</html>

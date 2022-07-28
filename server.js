@@ -1,5 +1,6 @@
 const { response } = require('express');
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const express = require('express');
 require("dotenv").config();
 require("express-async-errors");
@@ -11,12 +12,16 @@ const app = express();
 
 
 //MIDDLEWARE
+app.use(cors({ origin: "http://localhost:4000" }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 
+
+;
+
 //ROUTES
-app.get('/', express.static('public'));
+app.use(express.static('public'));
 app.use('/api/v1/auth', errorHandler(authRouter));
 
 app.use(globalErrorHandler);
