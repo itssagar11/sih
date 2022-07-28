@@ -5,7 +5,9 @@ require("dotenv").config();
 require("express-async-errors");
 const authRouter = require("./routes/authRoutes");
 const errorHandler = require("./middleware/errorHandler");
-const globalErrorHandler = require("./middleware/globalErrorHandler")
+const globalErrorHandler = require("./middleware/globalErrorHandler");
+const { authenticate } = require("./middleware/authentication");
+const { authorize } = require("./middleware/authorization");
 
 const app = express();
 
@@ -15,13 +17,10 @@ app.use(cors({ origin: "http://localhost:4000" }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-
-
-;
-
 //ROUTES
-app.use(express.static('public'));
 app.use('/api/v1/auth', errorHandler(authRouter));
+app.use("/account", express.static('public'));
+app.use(authenticate,  express.static('publicAuthenticated'),authorize);
 
 app.use(globalErrorHandler);
 

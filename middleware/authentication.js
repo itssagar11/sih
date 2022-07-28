@@ -12,7 +12,7 @@ const authenticate = async (req, res, next) => {
 
     if (accessCookie) {
         const User = validateToken(accessCookie, process.env.ACCESS_TOKEN_SECRET);
-        res.User = User;
+        req.User = User;
         return next();
 
     }
@@ -20,11 +20,10 @@ const authenticate = async (req, res, next) => {
         return res.redirect('/account');
     }
     const User = validateToken(refreshCookie, process.env.REFRESH_TOKEN_SECRET);
-
-    res.User = User.user;
+    req.User = User;
     createCookie(res, User.user, User.refreshTokenValue);
     next();
 
 }
 
-module.exports =authenticate
+module.exports = { authenticate };

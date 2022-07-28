@@ -111,7 +111,7 @@ const login = async (req, res) => {
     }
 
     const refreshToken = crypto.randomBytes(40).toString('hex');
-    user = { name: User.name, email: User.email, role: User.role, verified: User.verified };
+    user = { name: User.name, email: User.email, id: User.id, verified: User.verified };
     createCookie(res, user, refreshToken);
     res.status(200).json({ status: true, origin: "logged in " });
 }

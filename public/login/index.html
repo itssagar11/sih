@@ -46,7 +46,6 @@
         return;
       }
       req = JSON.stringify(req);
-      console.log(req);
 
       xhr.open("POST", "http://localhost:4000/api/v1/auth/login", true);
       xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
