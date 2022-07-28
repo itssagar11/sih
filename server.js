@@ -4,11 +4,10 @@ const express = require('express');
 require("dotenv").config();
 require("express-async-errors");
 const authRouter = require("./routes/authRoutes");
+const userRouter = require("./routes/userRouters");
 const errorHandler = require("./middleware/errorHandler");
 const globalErrorHandler = require("./middleware/globalErrorHandler");
 const { authenticate } = require("./middleware/authentication");
-const { authorize } = require("./middleware/authorization");
-
 const app = express();
 
 
@@ -20,7 +19,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 //ROUTES
 app.use('/api/v1/auth', errorHandler(authRouter));
 app.use("/account", express.static('public'));
-app.use(authenticate,  express.static('publicAuthenticated'),authorize);
+app.use(authenticate, errorHandler(userRouter));
 
 app.use(globalErrorHandler);
 
