@@ -7,7 +7,7 @@ const crypto = require('crypto');
 require('dotenv').config();
 
 const findUser = async (parameter, value) => {
-    const [[User, __], _] = await userAuthModel.findUser(parameter,value);
+    const [[User, __], _] = await userAuthModel.findUser(parameter, value);
     return User;
 
 }

@@ -17,7 +17,7 @@ const authenticate = async (req, res, next) => {
 
     }
     if (!refreshCookie) {
-        return res.redirect('/');
+        return res.redirect('/account');
     }
     const User = validateToken(refreshCookie, process.env.REFRESH_TOKEN_SECRET);
 
@@ -27,6 +27,4 @@ const authenticate = async (req, res, next) => {
 
 }
 
-module.exports = {
-    authenticate
-}
+module.exports =authenticate

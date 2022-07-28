@@ -45,23 +45,21 @@
         message.innerHTML = "fields cannot be empty";
         return;
       }
-
       req = JSON.stringify(req);
-      xhr.open("POST", "http://localhost:4000/api/v1/auth/login");
+      console.log(req);
+
+      xhr.open("POST", "http://localhost:4000/api/v1/auth/login", true);
       xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
       xhr.send(req);
       xhr.onload = () => {
         let res = JSON.parse(xhr.response);
-        console.log(res);
 
         if (res.status) {
-          document.location.assign("/user");
+          document.location.assign("/");
           return;
         }
-        console.log("start");
 
         message.innerHTML = `${res.origin}, ${res.message}`;
-        console.log("end");
       };
     };
     document.login.email.addEventListener("click", () => {
