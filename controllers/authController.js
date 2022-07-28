@@ -116,7 +116,7 @@ const login = async (req, res) => {
     res.status(200).json({ status: true, origin: "logged in " });
 }
 
-const logout = (req, res) => {
+const logout = async (req, res) => {
     if (req.signedCookies.accessCookie) res.cookie('accessCookie', 'logout', {
         httpOnly: true,
         expires: new Date(Date.now()),
