@@ -6,9 +6,16 @@ const createCookie = require("../utils/createCookie");
 const crypto = require('crypto');
 require('dotenv').config();
 
+const findUser = async (parameter, value) => {
+    const [[User, __], _] = await userAuthModel.findUser(parameter,value);
+    return User;
+
+}
+
 const register = async (req, res, next) => {
     const { name, password, email, role } = req.body;
-    const [[User, __], _] = await userAuthModel.findUser(email);
+    // const [[User, __], _] = await userAuthModel.findUser(email);
+    const User = await findUser("email", email);
 
     if (User) {
         var error = new customError.badRequestError("invalid email try again");
@@ -30,7 +37,9 @@ const register = async (req, res, next) => {
 
 const sendVerificationEmail = async (req, res) => {
     const { email, password } = req.body;
-    const [[User, __], _] = await userAuthModel.findUser(email);
+    // const [[User, __], _] = await userAuthModel.findUser(email);
+    const User = await findUser("email", email);
+
 
     if (!User) {
         var error = new customError.badRequestError("invalid email try again");
@@ -68,9 +77,9 @@ const sendVerificationEmail = async (req, res) => {
 
 const verifyMail = async (req, res) => {
     const { token, email } = req.query;
-    const [[User, __], _] = await userAuthModel.findUser(email);
-
-    if (User && !User.verified && (token != User.verificationToken)) {
+    // const [[User, __], _] = await userAuthModel.findUser(email);
+    const User = await findUser("email", email);
+    if (User && !User.verified && (token == User.verificationToken)) {
         await userAuthModel.update("verified", 1, email);
     }
 
@@ -80,7 +89,9 @@ const verifyMail = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-    const [[User, __], _] = await userAuthModel.findUser(email);
+    // const [[User, __], _] = await userAuthModel.findUser(email);
+    const User = await findUser("email", email);
+
     if (!User) {
         var error = new customError.badRequestError("please  try again");
         error.origin = "not registered";

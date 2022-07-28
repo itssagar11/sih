@@ -68,8 +68,8 @@ class userAuthModel {
     }
 
 
-    static async findUser(email) {
-        let query = `SELECT * FROM users WHERE email='${email}'`;
+    static async findUser(parameter,value) {
+        let query = `SELECT * FROM users WHERE ${parameter}='${value}'`;
         return pool.execute(query);
     }
     static async comparePassword(userPassword, databasePassword) {
@@ -77,8 +77,8 @@ class userAuthModel {
 
     }
 
-    static async update(field,value,email) {
-        let query = `UPDATE users SET ${field}=${value} WHERE email="${email}"`;
+    static async update(field, value, parameter) {
+        let query = `UPDATE users SET ${field}=${value} WHERE email="${parameter}"`; //id
         return pool.execute(query);
     }
 
