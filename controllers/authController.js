@@ -89,8 +89,8 @@ const login = async (req, res) => {
 
     const passwordComparison = await userAuthModel.comparePassword(password, User.password);
     if (!passwordComparison) {
-        var error = new customError.badRequestError("wrong password");
-        error.origin = "password";
+        var error = new customError.badRequestError("try again");
+        error.origin = "wrong password";
         throw error;
     }
     if (!User.verified) {

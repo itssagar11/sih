@@ -32,6 +32,7 @@
   </body>
   <script>
     const xhr = new XMLHttpRequest();
+    const message = document.getElementById("message");
 
     const sendLoginRequest = (e) => {
       event.preventDefault();
@@ -41,11 +42,7 @@
       };
 
       if (!req.email || !req.password) {
-        const message = document.getElementById("message");
         message.innerHTML = "fields cannot be empty";
-        setTimeout(() => {
-          message.innerHTML = "";
-        }, 2000);
         return;
       }
 
@@ -61,7 +58,17 @@
           document.location.assign("/user");
           return;
         }
+        console.log("start");
+
+        message.innerHTML = `${res.origin}, ${res.message}`;
+        console.log("end");
       };
     };
+    document.login.email.addEventListener("click", () => {
+      message.innerHTML = " ";
+    });
+    document.login.password.addEventListener("click", () => {
+      message.innerHTML = " ";
+    });
   </script>
 </html>
