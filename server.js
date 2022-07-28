@@ -1,4 +1,3 @@
-const { express } = require('express');
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require('express');
@@ -7,7 +6,6 @@ require("express-async-errors");
 const authRouter = require("./routes/authRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const globalErrorHandler = require("./middleware/globalErrorHandler")
-const { authenticate } = require("./middleware/authentication");
 
 const app = express();
 
@@ -19,15 +17,13 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 
 
-
+;
 
 //ROUTES
-// app.use("/account", authenticate, express.static("publicAuthenticated"));
-// app.use(express.static('public'));
+app.use(express.static('public'));
+app.use('/api/v1/auth', errorHandler(authRouter));
 
-// app.use('/api/v1/auth', errorHandler(authRouter));
-
-// app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 
 const startServer = () => {
