@@ -9,6 +9,7 @@ const authorize = (role) => {
             if (["admin", "employee", "user"].includes(role)) {
                 return res.redirect(`/${User.role}`);
             }
+            throw new Error("create a unauthorized error here ");
         } next();
 
     }
